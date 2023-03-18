@@ -13,9 +13,9 @@ ojCore.runCode = (runData) => {
   let suffix = ''
   let containerId = ''
   //容器初始化
-  if (runData.topic.language == 'java') {
+  if (runData.language == 'java') {
     suffix = '.java'
-  } else if (runData.topic.language == 'c') {
+  } else if (runData.language == 'c') {
     suffix = '.c'
     //执行代码 获取输出
     shell.exec(`sudo docker run - dit gcc /bin/bash`, (code, stdout, stderr) => {
@@ -33,9 +33,9 @@ ojCore.runCode = (runData) => {
     //获取当前时间戳 用于创建文件
     let timeStamp = new Date().getTime()
     //文件名 用户id + 题目id + 时间戳
-    let newFile = `./${userId}${topicId}${timeStamp}${suffix}`
+    let newFile = `./${runData.userId}${runData.topicId}${timeStamp}${suffix}`
     //文件创建
-    fileWrap.writeFile(newFile, runData.codeContent, (error) => {
+    fileWrap.writeFile(newFile, runData.code, (error) => {
       // 创建失败
       if (error) {
         console.log(`创建失败：${error}`)
