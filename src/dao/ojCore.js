@@ -17,36 +17,29 @@ ojCore.runCode = (runData) => {
     suffix = '.java'
   } else if (runData.language == 'c') {
     suffix = '.c'
-    //执行代码 获取输出
+    //创建容器并运行
     shell.exec(`sudo docker run - dit gcc /bin/bash`, (code, stdout, stderr) => {
-      console.log('执行代码 code: ' + code);
-      console.log('执行代码 stdout: ' + stdout);
-      console.log('执行代码 stderr: ' + stderr);
+      console.log('创建容器并运行 stderr: ' + stderr);
       containerId = stdout
     })
     // 进入容器
     shell.exec(`sudo docker attach ${containerId}`, (code, stdout, stderr) => {
-      console.log('进入容器 code: ' + code);
-      console.log('进入容器 stdout: ' + stdout);
       console.log('进入容器 stderr: ' + stderr);
+    })
+    //重定位路径
+    shell.exec(`cd /`, (code, stdout, stderr) => {
+      console.log('重定位路径 stderr: ' + stderr);
     })
     //获取当前时间戳 用于创建文件
     let timeStamp = new Date().getTime()
     //文件名 用户id + 题目id + 时间戳
-    let newFile = `./${runData.userId}${runData.topicId}${timeStamp}${suffix}`
+    let newFile = `${runData.userId}${runData.topicId}${timeStamp}${suffix}`
     //文件创建
-    fileWrap.writeFile(newFile, runData.code, (error) => {
-      // 创建失败
-      if (error) {
-        console.log(`创建失败：${error}`)
-      }
-      // 创建成功
-      console.log(`创建成功！`)
+    shell.exec(`echo ${runData.code} > ${newFile}`, (code, stdout, stderr) => {
+      console.log('创建文件 stderr: ' + stderr);
     })
     //编译代码
     shell.exec(`gcc ${newFile} -o main.out`, (code, stdout, stderr) => {
-      console.log('进入容器 code: ' + code);
-      console.log('进入容器 stdout: ' + stdout);
       console.log('进入容器 stderr: ' + stderr);
     })
     //获取样例数组
