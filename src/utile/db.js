@@ -1,7 +1,7 @@
 const { Sequelize } = require('sequelize');
 let dbUtile = {}
 dbUtile.newDataBase = () => {
-  const sequelize = new Sequelize('node_oj', 'root', '123456', {
+  const sequelize = new Sequelize('node_oj', 'root', 'mynewpassword', {
     host: 'localhost', //数据库地址
     dialect: 'mysql', //指定连接的数据库类型
     pool: {
